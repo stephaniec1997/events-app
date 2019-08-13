@@ -28,7 +28,7 @@ class Login extends Component {
           this.props.login(res.data.token);
 
         } else{
-          alert('wrong credentials');
+          alert(res.data.message);
         }
       });
   }

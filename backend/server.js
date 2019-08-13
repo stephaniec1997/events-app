@@ -24,12 +24,11 @@ const usersRouter = require('./routes/users');
 app.use('/events', eventsRouter);
 app.use('/users', usersRouter);
 
-// const confirmationPost = require('./routes/confirmationPost')
+const confirmationRouter = require('./routes/confirmation');
+const resendRouter = require('./routes/resend');
 
-// app.use('/confirmation', tokensRouter);
-
-// app.post('/confirmation', userController.confirmationPost);
-// app.post('/resend', userController.resendTokenPost);
+app.use('/confirmation', confirmationRouter);
+app.use('/resend', resendRouter);
 
 
 app.listen(port, () => {

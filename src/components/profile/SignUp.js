@@ -19,9 +19,10 @@ class SignUp extends Component {
   }
 
   signUp(user){
-    axios.post("http://localhost:5000/users/account/signup", user)
+    axios.post("http://localhost:5000/confirmation", user)
       .then( res => {
         if (res.data.success){
+          alert(res.data.message);
           this.props.createUser();
         } else {
           alert(res.data.message)
