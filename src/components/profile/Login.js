@@ -37,9 +37,10 @@ class Login extends Component {
     const loginParam = Object.keys(this.state).map((key) => {
       if (key !== "token"){
       return (
-        <div key={key}>
-          {key}:
-          <input type={key} key={key} value={this.state[key]} onChange={(e) => {this.updateInfo(key, e);}} />
+
+        <div class="form-group" key={key}>
+          <label>{key}: </label>
+          <input type={key} class="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
         </div>
       );
     }
@@ -47,7 +48,8 @@ class Login extends Component {
     });
 
     return (
-      <div>
+      <div className="signin">
+        <h2>Log In</h2>
         {loginParam}
         <button onClick={() => {this.onSignIn(this.state);}}>Login</button>
       </div>

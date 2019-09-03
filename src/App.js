@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-// import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css"
 // import { BrowserRouter as Router, Route} from "react-router-dom";
 import logo from './logo1.png';
 import './App.css';
@@ -159,8 +159,9 @@ class App extends Component {
     );
     const newEventButton = !this.state.signUp ? (<button className="button" onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu}); }}>New Event</button>): null;
     var menu = this.state.menu ? (
-      <div>
-        {newEventButton}<br/>
+      <div className='menuBar'>
+
+        {newEventButton}
         {log}
       </div>
 
@@ -168,9 +169,9 @@ class App extends Component {
   //   menu = this.state.signUp ? (<button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>Events</button>
   // ): menu;
     var page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event}/>): (<EventsContainer data={this.state.collection} chooseEvent={(editEvent)=> this.setState({event: editEvent, editor: !this.state.editor})} deleteEvent={this.deleteEvent}/>);
-    page = this.state.signUp? (<div><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
+    page = this.state.signUp? (<div class="d-flex justify-content-center"><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
     return (
-      <div>
+      <div id="app">
 
         <div className="topnav">
           <div className="topnav-centered">
@@ -184,11 +185,16 @@ class App extends Component {
           </div>
         </div>
 
-        <div className="menuRow">
-          {page}
-          <div className="menu">
-            {menu}
-          </div>
+          <div class="container" className="menuRow">
+            <div class="row justify-content-md-center">
+            <div class="col">
+              {page}
+            </div>
+            <div class="col-md-auto" className='topnav-right'>
+              {menu}
+            </div>
+            </div>
+
           </div>
 
       </div>

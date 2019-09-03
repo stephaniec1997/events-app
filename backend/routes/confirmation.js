@@ -75,10 +75,6 @@ router.route('/').post((req, res) => {
             const mes = 'A verification email has been sent to ' + user.email + '.'
             res.send({success: true, message: mes});
           });
-
-          // return res.send({
-          //   success: true,
-          //   message: 'Signed up'
         });
       });
     });
