@@ -7,6 +7,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      data: null
     };
 
     this.onSignIn = this.onSignIn.bind(this);
@@ -26,21 +27,31 @@ class Login extends Component {
       .then(res => {
         if (res.data.success) {
           this.props.login(res.data.token);
+          // this.setState({data: res.data});
+
 
         } else{
-          alert(res.data.message);
+          this.setState({data: res.data});
         }
       });
   }
 
   render() {
+    const badAlert = (this.state.data && !this.state.data.success) ? (
+      <div className="alert alert-warning alert-dismissible fade show" role="alert">
+        {this.state.data.message}
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    ): null;
     const loginParam = Object.keys(this.state).map((key) => {
-      if (key !== "token"){
+      if (key !== "data"){
       return (
 
-        <div class="form-group" key={key}>
+        <div className="form-group" key={key}>
           <label>{key}: </label>
-          <input type={key} class="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
+          <input type={key} className="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
         </div>
       );
     }
@@ -49,6 +60,7 @@ class Login extends Component {
 
     return (
       <div className="signin">
+      {badAlert}
         <h2>Log In</h2>
         {loginParam}
         <button onClick={() => {this.onSignIn(this.state);}}>Login</button>

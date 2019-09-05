@@ -2,9 +2,15 @@ import React from 'react';
 
 function EventContainer(props){
   const {name, startDate, endDate, place, description} = props.event
+  const button = props.token
   const start = startDate? startDate.toString(): null;
   const end = endDate? endDate.toString(): null;
 
+  const buttons = button ? (<div>
+    <button onClick={() => {props.chooseEvent(props.event)}}>Edit</button>
+    <button onClick={() => {props.deleteEvent(props.event)}}>Delete</button>
+    </div>
+  ): null;
   return(
     <div>
     <br/>
@@ -13,8 +19,7 @@ function EventContainer(props){
       {end}<br/>
       {place}<br/>
       {description}<br/>
-      <button onClick={() => {props.chooseEvent(props.event)}}>Edit</button>
-      <button onClick={() => {props.deleteEvent(props.event)}}>Delete</button>
+      {buttons}
     </div>
   );
 }

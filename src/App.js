@@ -22,7 +22,8 @@ class App extends Component {
       signUp: false,
       event: null,
       collection: [],
-      token:''
+      token:'',
+      admin:false
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -51,10 +52,16 @@ class App extends Component {
       // Verify token
       axios.get("http://localhost:5000/users/account/verify/", token)
         .then(res =>{
+          console.log(res.data);
           if (res.data.success) {
             this.setState({
-              token: token
+              token: token,
             });
+            if (res.data.message) {
+              this.setState({
+                admin: true
+              });
+              }
           }
         });
     }
@@ -157,7 +164,7 @@ class App extends Component {
     (
       <button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>{sign}</button>
     );
-    const newEventButton = !this.state.signUp ? (<button className="button" onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu}); }}>New Event</button>): null;
+    const newEventButton = !this.state.signUp && this.state.admin ? (<button className="button" onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu}); }}>New Event</button>): null;
     var menu = this.state.menu ? (
       <div className='menuBar'>
 
@@ -168,8 +175,9 @@ class App extends Component {
     ): null;
   //   menu = this.state.signUp ? (<button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>Events</button>
   // ): menu;
-    var page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event}/>): (<EventsContainer data={this.state.collection} chooseEvent={(editEvent)=> this.setState({event: editEvent, editor: !this.state.editor})} deleteEvent={this.deleteEvent}/>);
-    page = this.state.signUp? (<div class="d-flex justify-content-center"><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
+    var ad = this.state.admin ? (<p>ADMIN</p>):(<p>NOT ADMIN</p>);
+    var page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event}/>): (<EventsContainer data={this.state.collection} chooseEvent={(editEvent)=> this.setState({event: editEvent, editor: !this.state.editor})} deleteEvent={this.deleteEvent} token={this.state.admin}/>);
+    page = this.state.signUp? (<div className="d-flex justify-content-center"><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
     return (
       <div id="app">
 
@@ -178,6 +186,7 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h1>Events</h1>
             <p>{this.state.token}</p>
+            {ad}
           </div>
 
           <div className="topnav-right">
@@ -185,12 +194,12 @@ class App extends Component {
           </div>
         </div>
 
-          <div class="container" className="menuRow">
-            <div class="row justify-content-md-center">
-            <div class="col">
+          <div className="container, menuRow">
+            <div className="row justify-content-md-center">
+            <div className="col">
               {page}
             </div>
-            <div class="col-md-auto" className='topnav-right'>
+            <div className='col-md-auto, topnav-right'>
               {menu}
             </div>
             </div>

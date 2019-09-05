@@ -14,6 +14,7 @@ class EventsContainer extends Component {
         event={event}
         chooseEvent={this.props.chooseEvent}
         deleteEvent={this.props.deleteEvent}
+        token={this.props.token}
       />
     ));
 

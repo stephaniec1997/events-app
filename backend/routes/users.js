@@ -11,6 +11,22 @@ router.route('/').get((req, res) => {
 });
 
 
+router.route('/admin/:id').post((req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      user.admin = !user.admin;
+      let msg = 'User is no longer an admin.'
+      if (user.admin){
+        msg = 'User is now an admin'
+      }
+
+      user.save()
+        .then(() => res.json(msg))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 
 router.route('/account/signin').post((req, res) => {
   const { body } = req;
@@ -36,14 +52,14 @@ router.route('/account/signin').post((req, res) => {
     if (users.length != 1) {
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: User does not exist.'
       });
     }
     const user = users[0];
     if (!user.validPassword(password)) {
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: Invalid Password'
       });
     }
 
@@ -126,11 +142,30 @@ router.route('/account/verify').get((req, res) => {
           message: sessions//'Error: Invalid'
         });
       } else {
+
+
+        User.findOne({ id: sessions.userId, admin: true}, function (err, user) {
+            if (!user) return res.send({
+              success: true,
+              message: false
+            });
+                return res.send({
+                  success: true,
+                  message: true
+                });
+            });
+
+
+
+
+
+
+
         // DO ACTION
-        return res.send({
-          success: true,
-          message: 'Good'
-        });
+        // return res.send({
+        //   success: true,
+        //   message: 'Good'
+        // });
       }
     });
 })

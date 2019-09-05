@@ -41,9 +41,9 @@ class SignUp extends Component {
     const signUpParam = Object.keys(this.state).map((key) => {
       if ((key !== "data") && (key !== 'admin')){
       return (
-        <div class="form-group" key={key}>
+        <div className="form-group" key={key}>
           <label>{key}: </label>
-          <input type={key} class="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
+          <input type={key} className="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
         </div>
       );
     }
@@ -52,21 +52,20 @@ class SignUp extends Component {
     });
 
     const goodAlert = (this.state.data && this.state.data.success) ? (
-      <div class="alert alert-success" role="alert">
-        <h4 class="alert-heading">Well done!</h4>
+      <div className="alert alert-success" role="alert">
+        <h4 className="alert-heading">Well done!</h4>
         <p>{this.state.data.message}</p>
       </div>
     ): null;
-    
+
     const badAlert = (this.state.data && !this.state.data.success) ? (
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <div className="alert alert-warning alert-dismissible fade show" role="alert">
         {this.state.data.message}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     ): null;
-    const testingdata = this.state.data ? (this.state.data.message): null;
 
     return (
       <div className="signin">
