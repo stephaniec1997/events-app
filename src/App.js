@@ -11,6 +11,9 @@ import EventEditor from './components/events/EventEditor';
 import SignUp from './components/profile/SignUp';
 import Login from './components/profile/Login';
 
+import AdminList from './components/profile/admin/AdminList';
+
+
 
 
 class App extends Component {
@@ -20,6 +23,7 @@ class App extends Component {
       menu: false,
       editor: false,
       signUp: false,
+      changeAdmin:false,
       event: null,
       collection: [],
       token:'',
@@ -52,14 +56,14 @@ class App extends Component {
       // Verify token
       axios.get("http://localhost:5000/users/account/verify/", token)
         .then(res =>{
-          console.log(res.data);
           if (res.data.success) {
             this.setState({
               token: token,
             });
             if (res.data.message) {
+              alert(res.data.message);
               this.setState({
-                admin: true
+                admin: true,
               });
               }
           }
@@ -75,7 +79,7 @@ class App extends Component {
         this.addEvent(newEvent);
       }
     }
-    this.setState({ editor: !this.state.editor, menu: false, event:null});
+    this.setState({ editor: false, menu: false, event:null, changeAdmin:false});
   }
 
   addEvent(newEvent){
@@ -134,11 +138,7 @@ class App extends Component {
   login(token){
     alert('Login Successful!');
     setInStorage('events-app', {token: token})
-    this.setState({
-      menu: false,
-      signUp: false,
-      token: token
-    })
+    window.location.reload();
   }
 
   logout(){
@@ -150,6 +150,7 @@ class App extends Component {
           if (res.data.success) {
             this.setState({
               token: '',
+              admin: false
             });
           }
         });
@@ -158,17 +159,18 @@ class App extends Component {
   }
 
   render() {
-    var menuButton = (this.state.editor) ? null: (<button className="button" onClick={() => { this.setState({ menu: !this.state.menu }); }}>Menu</button>);
+    var menuButton = (this.state.editor) || this.state.changeAdmin ? null: (<button className="button" onClick={() => { this.setState({ menu: !this.state.menu }); }}>Menu</button>);
     var sign = this.state.signUp ? ("Events"): ("Sign In");
     var log = (this.state.token.length > 1) ? (<button className="button" onClick={() => { this.logout() }}>LogOut</button>):
     (
       <button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>{sign}</button>
     );
     const newEventButton = !this.state.signUp && this.state.admin ? (<button className="button" onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu}); }}>New Event</button>): null;
+    const adminChange = this.state.admin ? (<button className="button" onClick={() => { this.setState({ changeAdmin: !this.state.changeAdmin, menu:!this.state.menu}); }}>Change Admin</button>): null;
     var menu = this.state.menu ? (
       <div className='menuBar'>
-
         {newEventButton}
+        {adminChange}
         {log}
       </div>
 
@@ -178,6 +180,7 @@ class App extends Component {
     var ad = this.state.admin ? (<p>ADMIN</p>):(<p>NOT ADMIN</p>);
     var page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event}/>): (<EventsContainer data={this.state.collection} chooseEvent={(editEvent)=> this.setState({event: editEvent, editor: !this.state.editor})} deleteEvent={this.deleteEvent} token={this.state.admin}/>);
     page = this.state.signUp? (<div className="d-flex justify-content-center"><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
+    page = this.state.changeAdmin && this.state.admin? (<AdminList handleSave={this.handleSave}/>): page;
     return (
       <div id="app">
 
@@ -205,9 +208,7 @@ class App extends Component {
             </div>
 
           </div>
-
       </div>
-
 
     );
   }
