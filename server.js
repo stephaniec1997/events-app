@@ -3,7 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const path = require("path")
-app.use(express.static(path.join(__dirname, "client", "build")))
+
 
 
 
@@ -11,6 +11,10 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+
+
+app.use(express.static(path.join(__dirname, "client", "build")))
 
 app.use(cors());
 app.use(express.json());
