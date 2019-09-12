@@ -7,7 +7,7 @@ class SignUp extends Component {
     this.state = {
       username: '',
       email: '',
-      password: '',
+      password: null,
       admin: false,
       data: null,
     };
@@ -22,10 +22,14 @@ class SignUp extends Component {
   }
 
   signUp(user){
-    // TODO: have alerts as bootstrap
-    // verify a good email
-    // verify a long enough password
-    axios.post("http://localhost:5000/confirmation", user)
+    if(this.state.username.length < 3){
+      this.setState({data: {success:false, message:"Username is not long enough. Must be 3 characters long."}, password:''});
+    }else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email.toLowerCase()))){
+      this.setState({data: {success:false, message:"You have entered an invalid email address!"}, password:''});
+    }else if (this.state.password.length < 5){
+      this.setState({data: {success:false, message:"Password is not long enough. Must be 5 characters long"}, password:''});
+    }else{
+      axios.post("http://localhost:5000/confirmation", user)
       .then( res => {
         if (res.data.success){
           alert(res.data.message);
@@ -35,6 +39,7 @@ class SignUp extends Component {
           this.setState({data: res.data, password:''});
         }
       })
+    }
   }
 
   render() {

@@ -10,7 +10,8 @@ class EventEditor extends Component {
       startDate: this.props.event ? this.props.event.startDate : new Date(),
       endDate: this.props.event ? this.props.event.endDate : new Date(),
       place: this.props.event ? this.props.event.place : '',
-      description: this.props.event ? this.props.event.description : ''
+      description: this.props.event ? this.props.event.description : '',
+      pad: false
     };
 
     this.updateDate = this.updateDate.bind(this);
@@ -33,12 +34,31 @@ class EventEditor extends Component {
 
   render() {
     const options = Object.keys(this.state).map((key) => {
+      if (this.state[key] === false){
+        return null
+      }
       if (key === 'startDate' || key === 'endDate'){
         return(
           //the date picker
           <div key={key}>
             {key}:
             <DatePicker
+            forceShowMonthNavigation={true}
+            popperPlacement="top"
+            popperModifiers={{
+              flip: {
+                enabled: false
+              },
+              preventOverflow: {
+                enabled: true,
+                escapeWithReference: false
+              }
+            }}
+            onClickOutside={() => this.setState({pad:false})}
+            onSelect={() => this.setState({pad:false})}
+            onFocus={() => this.setState({pad:true})}
+            className={this.state.pad? ((key==="startDate")?"eventsStart": null):null}
+            showMonthDropdown={true}
             key={key}
             selected={new Date(this.state[key])}
             onChange={(dateTime) => this.updateDate(key, dateTime)}
@@ -46,12 +66,13 @@ class EventEditor extends Component {
           </div>
         );
       }
-      return (
-        <div key={key}>
-          {key}:
-          <input key={key} value={this.state[key]} onChange={(e) => {this.updateInfo(key, e);}} />
-        </div>
-      );
+
+          return (
+          <div key={key}>
+            {key}:
+            <input key={key} value={this.state[key]} onChange={(e) => {this.updateInfo(key, e);}} />
+          </div>
+        );
     });
 
     return (

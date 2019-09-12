@@ -3,8 +3,9 @@ import React from 'react';
 function EventContainer(props){
   const {name, startDate, endDate, place, description} = props.event
   const button = props.token
-  const start = startDate? startDate.toString(): null;
-  const end = endDate? endDate.toString(): null;
+  const start = startDate? (new Date(startDate)).toDateString(): null;
+  const end = endDate? (new Date(endDate)).toDateString(): null;
+  const date = (start === end)? start : (start + ' - ' + end);
 
   const buttons = button ? (<div>
     <button onClick={() => {props.chooseEvent(props.event)}}>Edit</button>
@@ -15,8 +16,7 @@ function EventContainer(props){
     <div>
     <br/>
       <b>{name}</b><br/>
-      {start} &#160;
-      {end}<br/>
+      {date}<br/>
       {place}<br/>
       {description}<br/>
       {buttons}

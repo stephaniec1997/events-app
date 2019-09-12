@@ -27,7 +27,8 @@ class App extends Component {
       event: null,
       collection: [],
       token:'',
-      admin:false
+      admin:false,
+      test:'hello'
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -42,26 +43,44 @@ class App extends Component {
     //LOAD EVENTS
     axios.get("http://localhost:5000/events/")
       .then(response => {
+
         this.setState({
           collection: response.data
         })
+        let sortedData = this.state.collection
+        sortedData = sortedData.sort((a, b) => {
+          if ( a.startDate > b.startDate){
+            return 1;
+          } else if ((a.startDate) < (b.startDate)){
+            return -1;
+          }
+          return 0;
+          });
+          this.setState({collection: sortedData});
+
+        // TODO: Do not display those that have passed
       })
       .catch((error) => {
         console.log(error);
       })
+
+    // SORT EVENTS
+
+
+
     // GET/VERIFY TOKEN
     const obj = getFromStorage('events-app');
     if (obj && obj.token) {
       const token = obj.token;
       // Verify token
-      axios.get("http://localhost:5000/users/account/verify/", token)
+      axios.get("http://localhost:5000/users/account/verify/" + token)
         .then(res =>{
+          console.log(res.data)
           if (res.data.success) {
             this.setState({
               token: token,
             });
             if (res.data.message) {
-              alert(res.data.message);
               this.setState({
                 admin: true,
               });
@@ -89,6 +108,7 @@ class App extends Component {
       })
       .then(res => {
         const newCollection =  this.state.collection;
+        // TODO: push item in correct spot
         newCollection.push(newEvent);
         this.setState({
           collection: newCollection
@@ -131,8 +151,6 @@ class App extends Component {
       menu: false,
       signUp: false
     })
-    // TODO: MAKE IT SO THAT YOU NEED  TO AUTHENTICATE USER
-    // THEN THAT YOU GO TO SIGN UP PAGE
   }
 
   login(token){
@@ -145,9 +163,10 @@ class App extends Component {
     const obj = getFromStorage('events-app');
     if (obj && obj.token) {
       const { token } = obj;
-      axios.get('http://localhost:5000/users/account/logout', {token: token})
+      axios.delete("http://localhost:5000/users/account/logout/" + token)
         .then(res => {
-          if (res.data.success) {
+          if (res.data) {
+            console.log(res.data)
             this.setState({
               token: '',
               admin: false
@@ -177,7 +196,6 @@ class App extends Component {
     ): null;
   //   menu = this.state.signUp ? (<button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>Events</button>
   // ): menu;
-    var ad = this.state.admin ? (<p>ADMIN</p>):(<p>NOT ADMIN</p>);
     var page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event}/>): (<EventsContainer data={this.state.collection} chooseEvent={(editEvent)=> this.setState({event: editEvent, editor: !this.state.editor})} deleteEvent={this.deleteEvent} token={this.state.admin}/>);
     page = this.state.signUp? (<div className="d-flex justify-content-center"><SignUp createUser={this.createUser}/><Login login={this.login}/></div>): page
     page = this.state.changeAdmin && this.state.admin? (<AdminList handleSave={this.handleSave}/>): page;
@@ -188,8 +206,7 @@ class App extends Component {
           <div className="topnav-centered">
             <img src={logo} className="App-logo" alt="logo" />
             <h1>Events</h1>
-            <p>{this.state.token}</p>
-            {ad}
+            <p>{this.state.test}</p>
           </div>
 
           <div className="topnav-right">
