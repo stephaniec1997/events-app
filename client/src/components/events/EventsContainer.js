@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import EventContainer from './EventContainer'
+import EventContainer from './EventContainer';
 
 class EventsContainer extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {newState: null};
+    this.state = { newState: null };
   }
 
   render() {
-    const listEvents = this.props.data.map(event => (
+    const listEvents = this.props.data.map((event) => (
       <EventContainer
         key={event.name}
         event={event}
@@ -20,7 +20,7 @@ class EventsContainer extends Component {
 
     return (
       <div className="eventsContainer">
-          {listEvents}
+        {listEvents}
       </div>
     );
   }

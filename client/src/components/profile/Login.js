@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import axios from 'axios';
 
 
 class Login extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-      data: null
+      data: null,
     };
 
     this.onSignIn = this.onSignIn.bind(this);
   }
 
-  updateInfo(key, e){
+  updateInfo(key, e) {
     const value = {};
-    value[key] =  e.target.value;
+    value[key] = e.target.value;
     this.setState(value);
   }
 
@@ -24,15 +24,13 @@ class Login extends Component {
     // TODO: tell them if account works or not, or make them reset password
 
     // Post request to backend
-    axios.post("/users/account/signin", user)
-      .then(res => {
+    axios.post('/users/account/signin', user)
+      .then((res) => {
         if (res.data.success) {
           this.props.login(res.data.token);
           // this.setState({data: res.data});
-
-
-        } else{
-          this.setState({data: res.data});
+        } else {
+          this.setState({ data: res.data });
         }
       });
   }
@@ -45,26 +43,30 @@ class Login extends Component {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    ): null;
+    ) : null;
     const loginParam = Object.keys(this.state).map((key) => {
-      if (key !== "data"){
-      return (
+      if (key !== 'data') {
+        return (
 
-        <div className="form-group" key={key}>
-          <label>{key}: </label>
-          <input type={key} className="form-control" id={key}  value={this.state[key]}onChange={(e) => {this.updateInfo(key, e);}} / >
-        </div>
-      );
-    }
-    return null;
+          <div className="form-group" key={key}>
+            <label>
+              {key}
+:
+              {' '}
+            </label>
+            <input type={key} className="form-control" id={key} value={this.state[key]} onChange={(e) => { this.updateInfo(key, e); }} />
+          </div>
+        );
+      }
+      return null;
     });
 
     return (
       <div className="signin">
-      {badAlert}
+        {badAlert}
         <h2>Log In</h2>
         {loginParam}
-        <button onClick={() => {this.onSignIn(this.state);}}>Login</button>
+        <button onClick={() => { this.onSignIn(this.state); }}>Login</button>
       </div>
     );
   }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css';
 
 class EventEditor extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       name: this.props.event ? this.props.event.name : '',
@@ -11,7 +11,7 @@ class EventEditor extends Component {
       endDate: this.props.event ? this.props.event.endDate : new Date(),
       place: this.props.event ? this.props.event.place : '',
       description: this.props.event ? this.props.event.description : '',
-      pad: false
+      pad: false,
     };
 
     this.updateDate = this.updateDate.bind(this);
@@ -19,14 +19,13 @@ class EventEditor extends Component {
   }
 
 
-
-  updateInfo(key, e){
+  updateInfo(key, e) {
     const value = {};
-    value[key] =  e.target.value;
+    value[key] = e.target.value;
     this.setState(value);
   }
 
-  updateDate(key, date){
+  updateDate(key, date) {
     const value = {};
     value[key] = date;
     this.setState(value);
@@ -34,52 +33,54 @@ class EventEditor extends Component {
 
   render() {
     const options = Object.keys(this.state).map((key) => {
-      if (this.state[key] === false){
-        return null
+      if (this.state[key] === false) {
+        return null;
       }
-      if (key === 'startDate' || key === 'endDate'){
-        return(
-          //the date picker
+      if (key === 'startDate' || key === 'endDate') {
+        return (
+          // the date picker
           <div key={key}>
-            {key}:
+            {key}
+:
             <DatePicker
-            forceShowMonthNavigation={true}
-            popperPlacement="top"
-            popperModifiers={{
-              flip: {
-                enabled: false
-              },
-              preventOverflow: {
-                enabled: true,
-                escapeWithReference: false
-              }
-            }}
-            onClickOutside={() => this.setState({pad:false})}
-            onSelect={() => this.setState({pad:false})}
-            onFocus={() => this.setState({pad:true})}
-            className={this.state.pad? ((key==="startDate")?"eventsStart": null):null}
-            showMonthDropdown={true}
-            key={key}
-            selected={new Date(this.state[key])}
-            onChange={(dateTime) => this.updateDate(key, dateTime)}
+              forceShowMonthNavigation
+              popperPlacement="top"
+              popperModifiers={{
+                flip: {
+                  enabled: false,
+                },
+                preventOverflow: {
+                  enabled: true,
+                  escapeWithReference: false,
+                },
+              }}
+              onClickOutside={() => this.setState({ pad: false })}
+              onSelect={() => this.setState({ pad: false })}
+              onFocus={() => this.setState({ pad: true })}
+              className={this.state.pad ? ((key === 'startDate') ? 'eventsStart' : null) : null}
+              showMonthDropdown
+              key={key}
+              selected={new Date(this.state[key])}
+              onChange={(dateTime) => this.updateDate(key, dateTime)}
             />
           </div>
         );
       }
 
-          return (
-          <div key={key}>
-            {key}:
-            <input key={key} value={this.state[key]} onChange={(e) => {this.updateInfo(key, e);}} />
-          </div>
-        );
+      return (
+        <div key={key}>
+          {key}
+:
+          <input key={key} value={this.state[key]} onChange={(e) => { this.updateInfo(key, e); }} />
+        </div>
+      );
     });
 
     return (
       <div className="eventsContainer">
         {options}
-        <button onClick={() => {this.props.handleSave()}}>Cancel</button>
-        <button onClick={() => {this.props.handleSave(this.state)}}>Save</button>
+        <button onClick={() => { this.props.handleSave(); }}>Cancel</button>
+        <button onClick={() => { this.props.handleSave(this.state); }}>Save</button>
       </div>
     );
   }
