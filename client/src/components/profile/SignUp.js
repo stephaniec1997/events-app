@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
+
+
 class SignUp extends Component {
   constructor(props){
     super(props);
@@ -29,7 +31,7 @@ class SignUp extends Component {
     }else if (this.state.password.length < 5){
       this.setState({data: {success:false, message:"Password is not long enough. Must be 5 characters long"}, password:''});
     }else{
-      axios.post("http://localhost:5000/confirmation", user)
+      axios.post("/confirmation", user)
       .then( res => {
         if (res.data.success){
           alert(res.data.message);

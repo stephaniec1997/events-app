@@ -19,7 +19,7 @@ class AdminList extends Component {
 
     componentDidMount(){
       //LOAD EVENTS
-      axios.get("http://localhost:5000/users/")
+      axios.get("/users/")
         .then(response => {
           this.setState({
             collection: response.data
@@ -35,7 +35,7 @@ class AdminList extends Component {
       console.log(this.state.changed[i])
 
       let user = this.state.changed[i];
-      let link = 'http://localhost:5000/users/admin/' + user._id;
+      let link = '/users/admin/' + user._id;
       axios.post(link)
       .then(res => console.log(res.data));
     }

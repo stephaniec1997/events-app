@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
+
 class Login extends Component {
   constructor(props){
     super(props);
@@ -23,7 +24,7 @@ class Login extends Component {
     // TODO: tell them if account works or not, or make them reset password
 
     // Post request to backend
-    axios.post("http://localhost:5000/users/account/signin", user)
+    axios.post("/users/account/signin", user)
       .then(res => {
         if (res.data.success) {
           this.props.login(res.data.token);

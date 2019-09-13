@@ -15,7 +15,6 @@ import AdminList from './components/profile/admin/AdminList';
 
 
 
-
 class App extends Component {
   constructor(){
     super();
@@ -28,7 +27,6 @@ class App extends Component {
       collection: [],
       token:'',
       admin:false,
-      test:'hello'
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -41,7 +39,7 @@ class App extends Component {
 
   componentDidMount(){
     //LOAD EVENTS
-    axios.get("http://localhost:5000/events/")
+    axios.get("/events/")
       .then(response => {
 
         this.setState({
@@ -73,7 +71,7 @@ class App extends Component {
     if (obj && obj.token) {
       const token = obj.token;
       // Verify token
-      axios.get("http://localhost:5000/users/account/verify/" + token)
+      axios.get("/users/account/verify/" + token)
         .then(res =>{
           console.log(res.data)
           if (res.data.success) {
@@ -102,7 +100,7 @@ class App extends Component {
   }
 
   addEvent(newEvent){
-    axios.post("http://localhost:5000/events/add", newEvent)
+    axios.post("/events/add", newEvent)
       .then(res => {
         newEvent = res.data;
       })
@@ -123,7 +121,7 @@ class App extends Component {
 
   updateEvent(newEvent){
     const eventID = this.state.event._id;
-    const url = "http://localhost:5000/events/update/" + eventID;
+    const url = "/events/update/" + eventID;
     axios.post(url, newEvent)
       .then(res => console.log(res.data));
     const index = this.state.collection.findIndex(evnt => evnt._id === eventID);
@@ -136,7 +134,7 @@ class App extends Component {
 
   deleteEvent(event){
     const id = event._id
-    axios.delete("http://localhost:5000/events/" + id)
+    axios.delete("/events/" + id)
       .then(res => console.log(res.data))
       .then(() =>
       this.setState({
@@ -163,7 +161,7 @@ class App extends Component {
     const obj = getFromStorage('events-app');
     if (obj && obj.token) {
       const { token } = obj;
-      axios.delete("http://localhost:5000/users/account/logout/" + token)
+      axios.delete("/users/account/logout/" + token)
         .then(res => {
           if (res.data) {
             console.log(res.data)
@@ -206,7 +204,6 @@ class App extends Component {
           <div className="topnav-centered">
             <img src={logo} className="App-logo" alt="logo" />
             <h1>Events</h1>
-            <p>{this.state.test}</p>
           </div>
 
           <div className="topnav-right">
