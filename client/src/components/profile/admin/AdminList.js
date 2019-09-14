@@ -31,21 +31,24 @@ class AdminList extends Component {
   }
 
   changeAdmin() {
-    for (let i = 0; i < (this.state.changed.length); i += 1) {
+    const { handleSave } = this.props;
+    const { changed } = this.state;
+    for (let i = 0; i < (changed.length); i += 1) {
       // axios
-      console.log(this.state.changed[i]);
+      console.log(changed[i]);
 
-      const user = this.state.changed[i];
+      const user = changed[i];
       const link = `/users/admin/${user._id}`;
       axios.post(link)
         .then((res) => console.log(res.data));
     }
     alert('Changes have been made. \n Changes you have made on your own account will not change until you logout. ');
-    this.props.handleSave();
+    handleSave();
   }
 
   isChanged(user) {
-    const change = this.state.changed;
+    const { changed } = this.state;
+    const { change } = changed;
     if (change.includes(user)) {
       const i = change.find((u) => u._id === user._id);
       change.splice(i, 1);
@@ -56,7 +59,9 @@ class AdminList extends Component {
   }
 
   render() {
-    const listUsers = this.state.collection.map((user) => (
+    const { collection, changed } = this.state;
+    const { handleSave } = this.props;
+    const listUsers = collection.map((user) => (
       <UserContainer
         user={user}
         key={user.username}
@@ -67,8 +72,10 @@ class AdminList extends Component {
     return (
       <div className="eventsContainer">
         {listUsers}
-        <button onClick={() => { this.props.handleSave(); }}>Cancel</button>
-        <button onClick={() => { this.changeAdmin(this.state.changed); }}>Make Changes in Admin</button>
+        <button type="button" onClick={() => { handleSave(); }}>Cancel</button>
+        <button type="button" onClick={() => { this.changeAdmin(changed); }}>
+Make Changes in Admin
+        </button>
       </div>
     );
   }

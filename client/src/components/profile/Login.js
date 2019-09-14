@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 
 class Login extends Component {
@@ -14,31 +15,33 @@ class Login extends Component {
     this.onSignIn = this.onSignIn.bind(this);
   }
 
-  updateInfo(key, e) {
-    const value = {};
-    value[key] = e.target.value;
-    this.setState(value);
-  }
-
   onSignIn(user) {
     // TODO: tell them if account works or not, or make them reset password
 
     // Post request to backend
     axios.post('/users/account/signin', user)
       .then((res) => {
-        if (res.data.success) {
-          this.props.login(res.data.token);
+        const { data } = res;
+        if (data.success) {
+          this.props.login(data.token);
           // this.setState({data: res.data});
         } else {
-          this.setState({ data: res.data });
+          this.setState({ data });
         }
       });
   }
 
+  updateInfo(key, e) {
+    const value = {};
+    value[key] = e.target.value;
+    this.setState(value);
+  }
+
   render() {
-    const badAlert = (this.state.data && !this.state.data.success) ? (
+    const { data } = this.state;
+    const badAlert = (data && !data.success) ? (
       <div className="alert alert-warning alert-dismissible fade show" role="alert">
-        {this.state.data.message}
+        {data.message}
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -49,7 +52,7 @@ class Login extends Component {
         return (
 
           <div className="form-group" key={key}>
-            <label>
+            <label htmlFor={key}>
               {key}
 :
               {' '}
@@ -66,10 +69,14 @@ class Login extends Component {
         {badAlert}
         <h2>Log In</h2>
         {loginParam}
-        <button onClick={() => { this.onSignIn(this.state); }}>Login</button>
+        <button type="submit" onClick={() => { this.onSignIn(this.state); }}>Login</button>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+};
 
 export default Login;

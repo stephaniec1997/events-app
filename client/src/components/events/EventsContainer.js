@@ -1,29 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import EventContainer from './EventContainer';
 
-class EventsContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { newState: null };
-  }
+function EventsContainer(props) {
+  const {
+    data, token, chooseEvent, deleteEvent,
+  } = props;
+  const listEvents = data.map((event) => (
+    <EventContainer
+      key={event.name}
+      event={event}
+      chooseEvent={chooseEvent}
+      deleteEvent={deleteEvent}
+      token={token}
+    />
+  ));
 
-  render() {
-    const listEvents = this.props.data.map((event) => (
-      <EventContainer
-        key={event.name}
-        event={event}
-        chooseEvent={this.props.chooseEvent}
-        deleteEvent={this.props.deleteEvent}
-        token={this.props.token}
-      />
-    ));
-
-    return (
-      <div className="eventsContainer">
-        {listEvents}
-      </div>
-    );
-  }
+  return (
+    <div className="eventsContainer">
+      {listEvents}
+    </div>
+  );
 }
 
 export default EventsContainer;

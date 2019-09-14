@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class UserContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { check: this.props.user ? this.props.user.admin : null };
+    this.state = { check: this.props.user.admin };
   }
 
   render() {
-    const { username, email } = this.props.user;
-    const check = (
+    const { user, isChanged } = this.props;
+    const { username, email } = user;
+    const { check } = this.state;
+    const checkbox = (
       <input
         name="admin"
         type="checkbox"
-        checked={this.state.check}
-        onChange={() => { this.setState({ check: !this.state.check }); this.props.isChanged(this.props.user); }}
+        checked={check}
+        onChange={() => {
+          this.setState({ check: !check });
+          isChanged(user);
+        }}
       />
     );
     return (
@@ -21,14 +27,19 @@ class UserContainer extends Component {
         <br />
         <b>{username}</b>
         {' '}
-&#160;
         {email}
         {' '}
-&#160;
-        {check}
+        {checkbox}
       </div>
     );
   }
 }
+UserContainer.propTypes = {
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    admin: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 export default UserContainer;

@@ -28,12 +28,13 @@ class Confirm extends Component {
 
 
   render() {
+    const { mes, email } = this.state;
     return (
       <div id="app">
-        <p>{this.state.mes}</p>
-        <label>Email: </label>
-        <input type="email" className="form-control" id="email" value={this.state.email} onChange={(e) => { this.setState({ email: e.target.value }); }} />
-        <button className="button" onClick={() => { this.confirmEmail(this.state.email); }}>Confirm Email</button>
+        <p>{mes}</p>
+        <label htmlFor="email">Email: </label>
+        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { this.setState({ email: e.target.value }); }} />
+        <button type="button" className="button" onClick={() => { this.confirmEmail(email); }}>Confirm Email</button>
       </div>
 
 

@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+
 class EventEditor extends Component {
   constructor(props) {
     super(props);
+    const { event } = this.props;
     this.state = {
-      name: this.props.event ? this.props.event.name : '',
-      startDate: this.props.event ? this.props.event.startDate : new Date(),
-      endDate: this.props.event ? this.props.event.endDate : new Date(),
-      place: this.props.event ? this.props.event.place : '',
-      description: this.props.event ? this.props.event.description : '',
+      name: event ? event.name : '',
+      startDate: event ? event.startDate : new Date(),
+      endDate: event ? event.endDate : new Date(),
+      place: event ? event.place : '',
+      description: event ? event.description : '',
       pad: false,
     };
 
@@ -32,6 +34,7 @@ class EventEditor extends Component {
   }
 
   render() {
+    const { handleSave } = this.props;
     const options = Object.keys(this.state).map((key) => {
       if (this.state[key] === false) {
         return null;
@@ -57,7 +60,7 @@ class EventEditor extends Component {
               onClickOutside={() => this.setState({ pad: false })}
               onSelect={() => this.setState({ pad: false })}
               onFocus={() => this.setState({ pad: true })}
-              className={this.state.pad ? ((key === 'startDate') ? 'eventsStart' : null) : null}
+              className={this.state.pad && (key === 'startDate') ? 'eventsStart' : null}
               showMonthDropdown
               key={key}
               selected={new Date(this.state[key])}
@@ -79,11 +82,12 @@ class EventEditor extends Component {
     return (
       <div className="eventsContainer">
         {options}
-        <button onClick={() => { this.props.handleSave(); }}>Cancel</button>
-        <button onClick={() => { this.props.handleSave(this.state); }}>Save</button>
+        <button type="button" onClick={() => { handleSave(); }}>Cancel</button>
+        <button type="button" onClick={() => { handleSave(this.state); }}>Save</button>
       </div>
     );
   }
 }
+
 
 export default EventEditor;
