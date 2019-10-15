@@ -134,3 +134,30 @@ router.route('/:tokenID').get((req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+
+
+// Model.findOne({username: "johndoe"}, function(err, userInfo) {
+//     if (err) {
+//       next("Technical error occured");
+//     } else {
+//       if (userInfo) {
+//         var SubModel = new SubModel();// Assumed to be initialized somewhere above in the sky
+//         SubModel.projectName = "SocialAuth";
+//         SubModel.projectLanguage = "PHP";
+//         SubModel.projectCost = 100;
+//         userInfo.projects.push(SubModel);
+//         userInfo.save(function(err) {
+//           if (err) {
+//             next("Technical error again.What a stable system i am");
+//           } else {
+//             next("New project experience added to user : " + userInfo.username);
+//           }
+//         });
+//       }
+//     }
+//   });
+//

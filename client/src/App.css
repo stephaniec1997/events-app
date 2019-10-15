@@ -2,104 +2,57 @@
   overflow: hidden;
 }
 
-#editor{
-  overflow: visible;
+#logo{
+  height: 75px;
+  width: auto;
+}
+
+.center{
+  position: absolute;
+  justify-content: center;
+  right: 45%;
+  left: 45%;
+  content:center
+}
+
+.center img{
+  padding-left: 10px
 }
 
 
-.App-logo {
-  /* animation: App-logo-spin infinite 20s linear; */
-  height: 80px;
+.logo{
+  color:white
+}
+
+.colorChange{
+  color: white
+}
+.colorChange:hover{
+  color: black
+}
+
+.flex-item {
+  position: absolute;
+  justify-content: right;
+  right: 20px;
+}
+
+
+.heightChange{
+  height: 150px
 }
 
 .eventsContainer {
   text-align: center;
 }
 
-.eventsStart{
-  margin: 30% 0 0% 0;
-}
-
-
-/* @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-} */
-
-/* Add a black background color to the top navigation */
-.topnav {
-  position: relative;
-  background-color: #333;
-  overflow: hidden;
-  padding: 20px;
-  height: 200px;
-  color: white;
-}
-
-/* Style the links inside the navigation bar */
-.button {
-  width: 100%;
-  float: left;
-  border: none;
-  background-color: #333;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 20px;
-  text-decoration: none;
-  font-size: 17px;
-  overflow: hidden;
-
-}
-
-/* Change the color of links on hover */
-.button:hover {
-  text-decoration: overline;
-  font-size: xx-large;
-  /* background-color: #ddd;
-  color: black; */
-}
-
-
-
-/* Centered section inside the top navigation */
-.topnav-centered  {
-  float: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-/* Right-aligned section inside the top navigation */
-.topnav-right {
-  float: right;
-}
-
-.menuRow {
-
-}
-
-.menu{
-  position: relative;
-  background-color: #333;
-  height: 100%;
-  color: white;
-  display: block;
-
-}
-
-.menuBar{
-  position: relative;
-  background-color: #333;
-  height: 1000%;
-  overflow: hidden;
-
-
-}
 
 .signin{
   background-color: lightgrey;
   border-style: groove;
   padding: 5%;
+}
+
+.eventsStart{
+  margin: 45% 0 0% 0;
 }
