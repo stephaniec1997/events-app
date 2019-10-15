@@ -13,6 +13,10 @@ import Login from './components/profile/Login';
 
 import AdminList from './components/profile/admin/AdminList';
 
+import {
+  Navbar, Nav, NavDropdown
+} from 'react-bootstrap/';
+
 
 class App extends Component {
   constructor() {
@@ -172,24 +176,26 @@ class App extends Component {
   }
 
   render() {
-    const menuButton = (this.state.editor) || this.state.changeAdmin ? null : (<button className="button" onClick={() => { this.setState({ menu: !this.state.menu }); }}>Menu</button>);
+    // <button aria-controls="responsive-navbar-nav" type="button" aria-label="Toggle navigation" class="navbar-toggler collapsed"><span class="navbar-toggler-icon"></span></button>
+    // const menuButton = this.state.editor || this.state.changeAdmin ? null: (<button aria-controls="basic-navbar-nav" type="button" aria-label="Toggle navigation" class=""><span class="navbar-toggler-icon"></span></button>);
+    const menuButton = (this.state.editor) || this.state.changeAdmin ? null : (<Nav.Link bsPrefix='colorChange' type="button" onClick={() => { this.setState({ menu: !this.state.menu }); }}><span class="navbar-toggler-icon"></span></Nav.Link>);
     const sign = this.state.signUp ? ('Events') : ('Sign In');
-    const log = (this.state.token.length > 1) ? (<button className="button" onClick={() => { this.logout(); }}>LogOut</button>)
+    const log = (this.state.token.length > 1) ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.logout(); }}>LogOut</Nav.Link>)
       : (
-        <button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false }); }}>{sign}</button>
+        <Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false }); }}>{sign}</Nav.Link>
       );
-    const newEventButton = !this.state.signUp && this.state.admin ? (<button className="button" onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu }); }}>New Event</button>) : null;
-    const adminChange = this.state.admin ? (<button className="button" onClick={() => { this.setState({ changeAdmin: !this.state.changeAdmin, menu: !this.state.menu }); }}>Change Admin</button>) : null;
+    const newEventButton = !this.state.signUp && this.state.admin ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu }); }}>New Event</Nav.Link>) : null;
+    const adminChange = this.state.admin ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ changeAdmin: !this.state.changeAdmin, menu: !this.state.menu }); }}>Change Admin</Nav.Link>) : null;
     const menu = this.state.menu ? (
-      <div className="menuBar">
+      <div>
         {newEventButton}
+        <br/>
         {adminChange}
+        <br/>
         {log}
       </div>
 
     ) : null;
-    //   menu = this.state.signUp ? (<button className="button" onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false}); }}>Events</button>
-    // ): menu;
     let page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event} />) : (<EventsContainer data={this.state.collection} chooseEvent={(editEvent) => this.setState({ event: editEvent, editor: !this.state.editor })} deleteEvent={this.deleteEvent} token={this.state.admin} />);
     page = this.state.signUp ? (
       <div className="d-flex justify-content-center">
@@ -199,31 +205,58 @@ class App extends Component {
     ) : page;
     page = this.state.changeAdmin && this.state.admin ? (<AdminList handleSave={this.handleSave} />) : page;
     return (
-      <div id="app">
-
-        <div className="topnav">
-          <div className="topnav-centered">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1>Events</h1>
+      <div>
+      <Navbar bg="dark" className='heightChange'>
+          <Navbar.Brand className='center' onClick={()=>{this.setState({ menu: false, editor: false, signUp: false, changeAdmin: false})}}>
+            <img
+              alt=""
+              src={logo}
+              width="30"
+              height="30"
+              id='logo'
+              className="d-inline-block align-top"
+            />
+            <h3 className='logo'>{' Events'}</h3>
+          </Navbar.Brand>
+          <div className='flex-item'>
+          <Nav className="justify-content-end">
+            <Nav.Link>{menuButton}</Nav.Link>
+          </Nav>
+          <Nav>
+            {menu}
+          </Nav>
           </div>
-
-          <div className="topnav-right">
-            {menuButton}
-          </div>
-        </div>
+      </Navbar>
 
         <div className="container, menuRow">
           <div className="row justify-content-md-center">
             <div className="col">
               {page}
             </div>
-            <div className="col-md-auto, topnav-right">
-              {menu}
-            </div>
           </div>
 
         </div>
       </div>
+
+    );
+    return(
+      <Navbar bg="dark" expand="lg" variant='dark'>
+  <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+  <Navbar.Collapse id="basic-navbar-nav">
+    <Nav className="mr-auto">
+      <Nav.Link href="#home">Home</Nav.Link>
+      <Nav.Link href="#link">Link</Nav.Link>
+      <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+      </NavDropdown>
+    </Nav>
+  </Navbar.Collapse>
+</Navbar>
 
     );
   }
