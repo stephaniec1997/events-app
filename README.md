@@ -1,9 +1,10 @@
+# Events MERN App
+
 This project was a personal project to learn backend coding. I used [Mongoose](https://mongoosejs.com) to model my data and defined routing with [Express](https://expressjs.com/en/guide/routing.html).
 
+## Demo
 
 You can find a demo of this project [here](https://events-app-mern.herokuapp.com).
-
-More info on the project can be found below.
 
 ## App Information
 
