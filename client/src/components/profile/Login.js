@@ -14,10 +14,10 @@ class Login extends Component {
     this.onSignIn = this.onSignIn.bind(this);
   }
 
+  // hits login enpoint
   onSignIn(user) {
     // TODO: tell them if account works or not, or make them reset password
     const { login } = this.props;
-    // Post request to backend
     axios.post('/users/account/signin', user)
       .then((res) => {
         const { data } = res;

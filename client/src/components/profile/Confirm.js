@@ -12,6 +12,7 @@ class Confirm extends Component {
     this.confirmEmail = this.confirmEmail.bind(this);
   }
 
+  // hits confirm account enpoint
   confirmEmail(email) {
     axios.post(window.location.href, email)
     // axios.post('http://localhost:5000/confirmation/47d00acb3e553fef3856ae2bc97d58cd', {email: email})

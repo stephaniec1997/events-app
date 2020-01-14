@@ -64,13 +64,11 @@ class App extends Component {
         });
         this.setState({ collection: sortedData });
 
-        // TODO: Do not display those that have passed
+        // TODO: Do not display those events that have passed
       })
       .catch((error) => {
         console.log(error); // eslint-disable-line no-console
       });
-
-    // SORT EVENTS
 
 
     // GET/VERIFY TOKEN
@@ -94,6 +92,8 @@ class App extends Component {
     }
   }
 
+  // if new event hit new event enpoint,
+  // else hit update event enpoint
   handleSave(newEvent) {
     const { event } = this.state;
     if (newEvent) {
@@ -108,14 +108,16 @@ class App extends Component {
     });
   }
 
+  // hits new event endpoint
   addEvent(newEvent) {
     const { collection } = this.state;
     axios.post('/events/add', newEvent)
       .then((res) => (res.data))
       .then((res) => {
         const newCollection = collection;
-        // TODO: push item in correct spot
+        // TODO: push item in correct spot not just the end
         newCollection.push(res);
+        // update state to inlcude new event
         this.setState({
           collection: newCollection,
         });
@@ -126,6 +128,7 @@ class App extends Component {
       });
   }
 
+  // hits update event enpoint
   updateEvent(newEvent) {
     const { event, collection } = this.state;
     const eventID = event._id;
@@ -141,6 +144,7 @@ class App extends Component {
     // have a setstate? i read somewhere...
   }
 
+  // hits delete event endpoint
   deleteEvent(event) {
     const { collection } = this.state;
     const id = event._id;
@@ -148,6 +152,7 @@ class App extends Component {
       .then((res) => {
         console.log(res.data); // eslint-disable-line no-console
         const newCollection = collection.filter((evnt) => evnt._id !== id);
+        // update state so deleted event isn't displayed
         this.setState({
           collection: newCollection,
         });
@@ -162,6 +167,7 @@ class App extends Component {
     });
   }
 
+  // hits logout endpoint
   logout() {
     const { menu } = this.state;
     const obj = getFromStorage('events-app');

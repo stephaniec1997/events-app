@@ -31,6 +31,7 @@ class AdminList extends Component {
       });
   }
 
+  // hits change user admin status enpoint
   changeAdmin() {
     const { handleSave } = this.props;
     const { changed } = this.state;
@@ -44,6 +45,8 @@ class AdminList extends Component {
     handleSave();
   }
 
+  // add user to changed array if not already in there
+  // or removes them if in array
   isChanged(user) {
     const { changed } = this.state;
     const change = changed;
