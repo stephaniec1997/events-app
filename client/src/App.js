@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // import { BrowserRouter as Router, Route} from "react-router-dom";
 import logo from './logo1.png';
 import './App.css';
@@ -204,6 +203,7 @@ class App extends Component {
       </div>
     ) : page;
     page = this.state.changeAdmin && this.state.admin ? (<AdminList handleSave={this.handleSave} />) : page;
+    // TODO: make menu items be under navbar
     return (
       <div>
       <Navbar bg="dark" className='heightChange'>
