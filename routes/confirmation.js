@@ -5,16 +5,14 @@ const router = require('express').Router();
 let Token = require('../models/token.model');
 let User = require('../models/user.model');
 
-/**
-* POST /signup
-*/
-
+/* GET all tokens */
 router.route('/tokens').get((req, res) => {
   Token.find()
   .then(tokens=> res.json(tokens))
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
+/* POST user and verification token; used to create new account */
 router.route('/').post((req, res) => {
   const { body } = req;
   const { password, username } = body;
@@ -73,7 +71,7 @@ router.route('/').post((req, res) => {
         token.save(function (err) {
           if (err) { return res.status(500).send({ success: false, message: err.message }); }
 
-          // Send the email
+          // Send the email with verification info
           var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env.ADMIN_USERNAME, pass: process.env.ADMIN_PASSWORD } });
           var mailOptions = { from: 'stephanie.castaneda@girlswhocode.com', to: user.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
           transporter.sendMail(mailOptions, function (err) {
@@ -85,22 +83,15 @@ router.route('/').post((req, res) => {
       });
     });
   });
-
-
-  // return res.send({
-  //   success: false,
-  //   message: 'I fucked up'
-  // });
-
 }); // end of sign up endpoint
 
-
-
-router.route('/:tokenID').get((req, res) => {
+// TODO: test this
+/* PUT verify user account with email */
+router.route('/:tokenID').put((req, res) => {
     // Find a matching token
-    // let email = req.body.email;
-    // email = email.toLowerCase();
-    // email = email.trim();
+    let email = req.body.email;
+    email = email.toLowerCase();
+    email = email.trim();
 
     Token.findOne({ token: req.params.tokenID }, function (err, token) {
         if (!token) return res.send({
@@ -109,8 +100,8 @@ router.route('/:tokenID').get((req, res) => {
         });
 
         // If we found a token, find a matching user
-        // User.findOne({ _id: token._userId, email: email}, function (err, user) {
-        User.findOne({ _id: token._userId}, function (err, user) {
+        User.findOne({ _id: token._userId, email: email}, function (err, user) {
+        // User.findOne({ _id: token._userId}, function (err, user) {
             if (!user) return res.send({
               success: false,
               message: 'Error: We were unable to find a user for this token.'
@@ -134,30 +125,3 @@ router.route('/:tokenID').get((req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-
-
-// Model.findOne({username: "johndoe"}, function(err, userInfo) {
-//     if (err) {
-//       next("Technical error occured");
-//     } else {
-//       if (userInfo) {
-//         var SubModel = new SubModel();// Assumed to be initialized somewhere above in the sky
-//         SubModel.projectName = "SocialAuth";
-//         SubModel.projectLanguage = "PHP";
-//         SubModel.projectCost = 100;
-//         userInfo.projects.push(SubModel);
-//         userInfo.save(function(err) {
-//           if (err) {
-//             next("Technical error again.What a stable system i am");
-//           } else {
-//             next("New project experience added to user : " + userInfo.username);
-//           }
-//         });
-//       }
-//     }
-//   });
-//

@@ -130,7 +130,7 @@ class App extends Component {
     const { event, collection } = this.state;
     const eventID = event._id;
     const url = `/events/update/${eventID}`;
-    axios.post(url, newEvent)
+    axios.put(url, newEvent)
       .then((res) => console.log(res.data)); // eslint-disable-line no-console
     const index = collection.findIndex((evnt) => evnt._id === eventID);
     const newCollection = collection;

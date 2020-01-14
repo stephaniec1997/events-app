@@ -3,15 +3,15 @@ let User = require('../models/user.model');
 let UserSession = require('../models/userSession.model');
 
 
-
+/* GET all users */
 router.route('/').get((req, res) => {
   User.find()
   .then(users => res.json(users))
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
-router.route('/admin/:id').post((req, res) => {
+/* PUT (edit) user admin status */
+router.route('/admin/:id').put((req, res) => {
   User.findById(req.params.id)
   .then(user => {
     user.admin = !user.admin;
@@ -19,7 +19,6 @@ router.route('/admin/:id').post((req, res) => {
     if (user.admin){
       msg = 'User is now an admin'
     }
-
     user.save()
     .then(() => res.json(msg))
     .catch(err => res.status(400).json('Error: ' + err));
@@ -27,7 +26,7 @@ router.route('/admin/:id').post((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
+/* POST login user; creates new user session*/
 router.route('/account/signin').post((req, res) => {
   const { body } = req;
   const {
@@ -91,11 +90,11 @@ router.route('/account/signin').post((req, res) => {
   });
 });
 
+/* DELETE logout user; deletes user session by id*/
 router.route('/account/logout/:id').delete((req, res) => {
   // Get the token
   const token = req.params.id;
 
-  // ?token=test
   // Verify the token is one of a kind and it's not deleted.
   UserSession.findByIdAndDelete(token)
   .then((session) => {
@@ -116,19 +115,15 @@ router.route('/account/logout/:id').delete((req, res) => {
 
 });
 
-
+/* GET user session info by id; verifies if user is logged in and if user is admin */
 router.route('/account/verify/:id').get((req, res) => {
   // Get the token
   const token = req.params.id;
-  // ?token=test
+
   // Verify the token is one of a kind and it's not deleted.
   UserSession.findById(token)
   .then(session => {
-    // id = session.userId
-    // return res.send({
-    //   success: true,
-    //   message: id
-    // })
+    // Get User Admin Status
     User.findOne({ _id: session.userId}, function (err, user) {
 
       if (!user) return res.send({
@@ -147,56 +142,9 @@ router.route('/account/verify/:id').get((req, res) => {
       message: false //'Error: Invalid'
     });
   });
-
-  // UserSession.findOne({
-  //   id: token,
-  //   isDeleted: false
-  // }, (err, sessions) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.send({
-  //       success: false,
-  //       message: 'Error: Server error'
-  //     });
-  //   }
-  //
-  //   if(sessions!=0) {
-  //     return res.send({
-  //       success: false,
-  //       message: token //'Error: Invalid'
-  //     });
-  //   }
-  //    else{
-  //
-  //
-  //     User.find({ id: sessions.userId, admin: true}, function (err, user) {
-  //
-  //         if (!user) return res.send({
-  //           success: true,
-  //           message: false
-  //         });
-  //             return res.send({
-  //               success: true,
-  //               message: true
-  //             });
-  //         });
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //     // DO ACTION
-  //     // return res.send({
-  //     //   success: true,
-  //     //   message: 'Good'
-  //     // });
-  //   }
-  // });
 })
 
-
+/* GET user sessions*/
 router.route('/sessions').get((req, res) => {
   UserSession.find()
   .then(users => res.json(users))

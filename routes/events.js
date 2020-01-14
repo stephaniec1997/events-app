@@ -1,18 +1,21 @@
 const router = require('express').Router();
 let Event = require('../models/event.model');
 
+/* GET all events */
 router.route('/').get((req, res) => {
   Event.find()
     .then(events => res.json(events))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+/* GET event by id */
 router.route('/:id').get((req, res) => {
   Event.findById(req.params.id)
     .then(event => res.json(event))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+/* POST (add new) event */
 router.route('/add').post((req, res) =>{
   const name = req.body.name;
   const startDate = Date.parse(req.body.startDate);
@@ -33,13 +36,15 @@ router.route('/add').post((req, res) =>{
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+/* DELETE event by id */
 router.route('/:id').delete((req, res) => {
   Event.findByIdAndDelete(req.params.id)
     .then(() => res.json('Event Deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update/:id').post((req, res) => {
+/* PUT (edit) event by id */
+router.route('/update/:id').put((req, res) => {
   Event.findById(req.params.id)
     .then(event => {
       event.name = req.body.name;
