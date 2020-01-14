@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  Navbar, Nav,
+  // NavDropdown,
+} from 'react-bootstrap/';
 // import { BrowserRouter as Router, Route} from "react-router-dom";
-import logo from './logo1.png';
 import './App.css';
 import { setInStorage, getFromStorage } from './utils/storage';
 
@@ -13,10 +15,15 @@ import Login from './components/profile/Login';
 
 import AdminList from './components/profile/admin/AdminList';
 
-import {
-  Navbar, Nav, NavDropdown
-} from 'react-bootstrap/';
 
+import logo from './logo1.png';
+
+
+function login(token) {
+  alert('Login Successful!');
+  setInStorage('events-app', { token });
+  window.location.reload();
+}
 
 class App extends Component {
   constructor() {
@@ -36,7 +43,6 @@ class App extends Component {
     this.deleteEvent = this.deleteEvent.bind(this);
     this.createUser = this.createUser.bind(this);
     this.logout = this.logout.bind(this);
-    this.login = this.login.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
@@ -47,7 +53,7 @@ class App extends Component {
         this.setState({
           collection: response.data,
         });
-        let sortedData = this.state.collection;
+        let sortedData = response.data;
         sortedData = sortedData.sort((a, b) => {
           if (a.startDate > b.startDate) {
             return 1;
@@ -61,7 +67,7 @@ class App extends Component {
         // TODO: Do not display those that have passed
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       });
 
     // SORT EVENTS
@@ -74,7 +80,6 @@ class App extends Component {
       // Verify token
       axios.get(`/users/account/verify/${token}`)
         .then((res) => {
-          console.log(res.data);
           if (res.data.success) {
             this.setState({
               token,
@@ -90,8 +95,9 @@ class App extends Component {
   }
 
   handleSave(newEvent) {
+    const { event } = this.state;
     if (newEvent) {
-      if (this.state.event) {
+      if (event) {
         this.updateEvent(newEvent);
       } else {
         this.addEvent(newEvent);
@@ -103,44 +109,49 @@ class App extends Component {
   }
 
   addEvent(newEvent) {
+    const { collection } = this.state;
     axios.post('/events/add', newEvent)
+      .then((res) => (res.data))
       .then((res) => {
-        newEvent = res.data;
-      })
-      .then((res) => {
-        const newCollection = this.state.collection;
+        const newCollection = collection;
         // TODO: push item in correct spot
-        newCollection.push(newEvent);
+        newCollection.push(res);
         this.setState({
           collection: newCollection,
         });
-        console.log('Event Added!');
+        console.log('Event Added!'); // eslint-disable-line no-console
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       });
   }
 
   updateEvent(newEvent) {
-    const eventID = this.state.event._id;
+    const { event, collection } = this.state;
+    const eventID = event._id;
     const url = `/events/update/${eventID}`;
     axios.post(url, newEvent)
-      .then((res) => console.log(res.data));
-    const index = this.state.collection.findIndex((evnt) => evnt._id === eventID);
-    const newCollection = this.state.collection;
-    newEvent._id = eventID;
-    newCollection[index] = newEvent;
+      .then((res) => console.log(res.data)); // eslint-disable-line no-console
+    const index = collection.findIndex((evnt) => evnt._id === eventID);
+    const newCollection = collection;
+    const newEventWithID = newEvent;
+    newEventWithID._id = eventID;
+    newCollection[index] = newEventWithID;
     // TODO: try putting this in a setState, this works now but it's better to
     // have a setstate? i read somewhere...
   }
 
   deleteEvent(event) {
+    const { collection } = this.state;
     const id = event._id;
     axios.delete(`/events/${id}`)
-      .then((res) => console.log(res.data))
-      .then(() => this.setState({
-        collection: this.state.collection.filter((evnt) => evnt._id !== id),
-      }));
+      .then((res) => {
+        console.log(res.data); // eslint-disable-line no-console
+        const newCollection = collection.filter((evnt) => evnt._id !== id);
+        this.setState({
+          collection: newCollection,
+        });
+      });
   }
 
   createUser() {
@@ -151,20 +162,14 @@ class App extends Component {
     });
   }
 
-  login(token) {
-    alert('Login Successful!');
-    setInStorage('events-app', { token });
-    window.location.reload();
-  }
-
   logout() {
+    const { menu } = this.state;
     const obj = getFromStorage('events-app');
     if (obj && obj.token) {
       const { token } = obj;
       axios.delete(`/users/account/logout/${token}`)
         .then((res) => {
           if (res.data) {
-            console.log(res.data);
             this.setState({
               token: '',
               admin: false,
@@ -172,61 +177,100 @@ class App extends Component {
           }
         });
     }
-    this.setState({ editor: false, signUp: false, menu: !this.state.menu });
+    this.setState({ editor: false, signUp: false, menu: !menu });
   }
 
   render() {
-    // <button aria-controls="responsive-navbar-nav" type="button" aria-label="Toggle navigation" class="navbar-toggler collapsed"><span class="navbar-toggler-icon"></span></button>
-    // const menuButton = this.state.editor || this.state.changeAdmin ? null: (<button aria-controls="basic-navbar-nav" type="button" aria-label="Toggle navigation" class=""><span class="navbar-toggler-icon"></span></button>);
-    const menuButton = (this.state.editor) || this.state.changeAdmin ? null : (<Nav.Link bsPrefix='colorChange' type="button" onClick={() => { this.setState({ menu: !this.state.menu }); }}><span class="navbar-toggler-icon"></span></Nav.Link>);
-    const sign = this.state.signUp ? ('Events') : ('Sign In');
-    const log = (this.state.token.length > 1) ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.logout(); }}>LogOut</Nav.Link>)
+    const {
+      editor, signUp, token, admin, menu, changeAdmin, event, collection,
+    } = this.state;
+    // <button
+    //     aria-controls="responsive-navbar-nav"
+    //     type="button"
+    //     aria-label="Toggle navigation"
+    //     class="navbar-toggler collapsed"
+    //   >
+    //     <span class="navbar-toggler-icon"></span>
+    // </button>
+    // const menuButton = editor || changeAdmin ? null: (
+    // <button
+    //   aria-controls="basic-navbar-nav"
+    //   type="button"
+    //   aria-label="Toggle navigation"
+    //   class=""
+    // >
+    //   <span class="navbar-toggler-icon"></span>
+    // </button>
+    // );
+    const menuButton = (editor) || changeAdmin ? null : (<Nav.Link bsPrefix="colorChange" type="button" onClick={() => { this.setState({ menu: !menu }); }}><span className="navbar-toggler-icon" /></Nav.Link>);
+    const sign = signUp ? ('Events') : ('Sign In');
+    const log = (token.length > 1) ? (<Nav.Link bsPrefix="colorChange" onClick={() => { this.logout(); }}>LogOut</Nav.Link>)
       : (
-        <Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ signUp: !this.state.signUp, menu: false }); }}>{sign}</Nav.Link>
+        <Nav.Link bsPrefix="colorChange" onClick={() => { this.setState({ signUp: !signUp, menu: false }); }}>{sign}</Nav.Link>
       );
-    const newEventButton = !this.state.signUp && this.state.admin ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ editor: !this.state.editor, menu: !this.state.menu }); }}>New Event</Nav.Link>) : null;
-    const adminChange = this.state.admin ? (<Nav.Link bsPrefix='colorChange' onClick={() => { this.setState({ changeAdmin: !this.state.changeAdmin, menu: !this.state.menu }); }}>Change Admin</Nav.Link>) : null;
-    const menu = this.state.menu ? (
+    const newEventButton = !signUp && admin ? (<Nav.Link bsPrefix="colorChange" onClick={() => { this.setState({ editor: !editor, menu: !menu }); }}>New Event</Nav.Link>) : null;
+    const adminChange = admin ? (<Nav.Link bsPrefix="colorChange" onClick={() => { this.setState({ changeAdmin: !changeAdmin, menu: !menu }); }}>Change Admin</Nav.Link>) : null;
+    const menuDisplay = menu ? (
       <div>
         {newEventButton}
-        <br/>
+        <br />
         {adminChange}
-        <br/>
+        <br />
         {log}
       </div>
 
     ) : null;
-    let page = this.state.editor ? (<EventEditor handleSave={this.handleSave} event={this.state.event} />) : (<EventsContainer data={this.state.collection} chooseEvent={(editEvent) => this.setState({ event: editEvent, editor: !this.state.editor })} deleteEvent={this.deleteEvent} token={this.state.admin} />);
-    page = this.state.signUp ? (
+    let page = editor ? (
+      <EventEditor
+        handleSave={this.handleSave}
+        event={event}
+      />
+    ) : (
+      <EventsContainer
+        data={collection}
+        chooseEvent={(editEvent) => this.setState({ event: editEvent, editor: !editor })}
+        deleteEvent={this.deleteEvent}
+        token={admin}
+      />
+    );
+    page = signUp ? (
       <div className="d-flex justify-content-center">
         <SignUp createUser={this.createUser} />
-        <Login login={this.login} />
+        <Login login={login} />
       </div>
     ) : page;
-    page = this.state.changeAdmin && this.state.admin ? (<AdminList handleSave={this.handleSave} />) : page;
+    page = changeAdmin && admin ? (<AdminList handleSave={this.handleSave} />) : page;
+    // TODO: make menu items be under navbar
     return (
       <div>
-      <Navbar bg="dark" className='heightChange'>
-          <Navbar.Brand className='center' onClick={()=>{this.setState({ menu: false, editor: false, signUp: false, changeAdmin: false})}}>
+        <Navbar bg="dark" className="heightChange">
+          <Navbar.Brand
+            className="center"
+            onClick={() => {
+              this.setState({
+                menu: false, editor: false, signUp: false, changeAdmin: false,
+              });
+            }}
+          >
             <img
               alt=""
               src={logo}
               width="30"
               height="30"
-              id='logo'
+              id="logo"
               className="d-inline-block align-top"
             />
-            <h3 className='logo'>{' Events'}</h3>
+            <h3 className="logo"> Events</h3>
           </Navbar.Brand>
-          <div className='flex-item'>
-          <Nav className="justify-content-end">
-            <Nav.Link>{menuButton}</Nav.Link>
-          </Nav>
-          <Nav>
-            {menu}
-          </Nav>
+          <div className="flex-item">
+            <Nav className="justify-content-end">
+              <Nav.Link>{menuButton}</Nav.Link>
+            </Nav>
+            <Nav>
+              {menuDisplay}
+            </Nav>
           </div>
-      </Navbar>
+        </Navbar>
 
         <div className="container, menuRow">
           <div className="row justify-content-md-center">
@@ -239,26 +283,26 @@ class App extends Component {
       </div>
 
     );
-    return(
-      <Navbar bg="dark" expand="lg" variant='dark'>
-  <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="mr-auto">
-      <Nav.Link href="#home">Home</Nav.Link>
-      <Nav.Link href="#link">Link</Nav.Link>
-      <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-      </NavDropdown>
-    </Nav>
-  </Navbar.Collapse>
-</Navbar>
-
-    );
+    // return (
+    //   <Navbar bg="dark" expand="lg" variant="dark">
+    //     <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+    //     <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    //     <Navbar.Collapse id="basic-navbar-nav">
+    //       <Nav className="mr-auto">
+    //         <Nav.Link href="#home">Home</Nav.Link>
+    //         <Nav.Link href="#link">Link</Nav.Link>
+    //         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+    //           <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+    //           <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+    //           <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+    //           <NavDropdown.Divider />
+    //           <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+    //         </NavDropdown>
+    //       </Nav>
+    //     </Navbar.Collapse>
+    //   </Navbar>
+    //
+    // );
   }
 }
 

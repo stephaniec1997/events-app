@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import EventContainer from './EventContainer';
 
 function EventsContainer(props) {
@@ -21,5 +22,18 @@ function EventsContainer(props) {
     </div>
   );
 }
+
+EventsContainer.propTypes = {
+  token: PropTypes.bool.isRequired,
+  chooseEvent: PropTypes.func.isRequired,
+  deleteEvent: PropTypes.func.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    place: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired).isRequired,
+};
 
 export default EventsContainer;

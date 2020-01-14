@@ -14,11 +14,11 @@ export function getFromStorage(key) {
 }
 export function setInStorage(key, obj) {
   if (!key) {
-    console.error('Error: Key is missing');
+    console.error('Error: Key is missing'); // eslint-disable-line no-console
   }
   try {
     localStorage.setItem(key, JSON.stringify(obj));
   } catch (err) {
-    console.error(err);
+    console.error(err); // eslint-disable-line no-console
   }
 }
