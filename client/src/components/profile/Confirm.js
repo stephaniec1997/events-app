@@ -32,8 +32,16 @@ class Confirm extends Component {
     return (
       <div id="app">
         <p>{mes}</p>
-        <label htmlFor="email">Email: </label>
-        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { this.setState({ email: e.target.value }); }} />
+        <label htmlFor="email">
+        Email:
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            value={email}
+            onChange={(e) => { this.setState({ email: e.target.value }); }}
+          />
+        </label>
         <button type="button" className="button" onClick={() => { this.confirmEmail(email); }}>Confirm Email</button>
       </div>
 

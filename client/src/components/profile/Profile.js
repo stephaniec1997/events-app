@@ -2,7 +2,7 @@ import React from 'react';
 
 // TODO: DISPLAY USER INFO
 
-function Profile(props) {
+function Profile() {
   return (
     <div>
       <p> You are on Profile component</p>

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 class UserContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { check: this.props.user.admin };
+    const { user } = props;
+    this.state = { check: user.admin };
   }
 
   render() {
@@ -40,6 +41,7 @@ UserContainer.propTypes = {
     email: PropTypes.string.isRequired,
     admin: PropTypes.bool.isRequired,
   }).isRequired,
+  isChanged: PropTypes.func.isRequired,
 };
 
 export default UserContainer;

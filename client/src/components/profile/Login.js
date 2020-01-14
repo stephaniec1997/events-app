@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -17,13 +16,13 @@ class Login extends Component {
 
   onSignIn(user) {
     // TODO: tell them if account works or not, or make them reset password
-
+    const { login } = this.props;
     // Post request to backend
     axios.post('/users/account/signin', user)
       .then((res) => {
         const { data } = res;
         if (data.success) {
-          this.props.login(data.token);
+          login(data.token);
           // this.setState({data: res.data});
         } else {
           this.setState({ data });
@@ -38,7 +37,8 @@ class Login extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { state } = this;
+    const { data } = state;
     const badAlert = (data && !data.success) ? (
       <div className="alert alert-warning alert-dismissible fade show" role="alert">
         {data.message}
@@ -47,17 +47,19 @@ class Login extends Component {
         </button>
       </div>
     ) : null;
-    const loginParam = Object.keys(this.state).map((key) => {
+    const loginParam = Object.keys(state).map((key) => {
       if (key !== 'data') {
         return (
 
           <div className="form-group" key={key}>
-            <label htmlFor={key}>
-              {key}
-:
-              {' '}
-            </label>
-            <input type={key} className="form-control" id={key} value={this.state[key]} onChange={(e) => { this.updateInfo(key, e); }} />
+            <label htmlFor={key}>{`${key}: `}</label>
+            <input
+              type={key}
+              className="form-control"
+              id={key}
+              value={state[key]}
+              onChange={(e) => { this.updateInfo(key, e); }}
+            />
           </div>
         );
       }
@@ -69,7 +71,7 @@ class Login extends Component {
         {badAlert}
         <h2>Log In</h2>
         {loginParam}
-        <button type="submit" onClick={() => { this.onSignIn(this.state); }}>Login</button>
+        <button type="submit" onClick={() => { this.onSignIn(state); }}>Login</button>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import UserContainer from './UserContainer';
 
@@ -26,7 +27,7 @@ class AdminList extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       });
   }
 
@@ -34,13 +35,10 @@ class AdminList extends Component {
     const { handleSave } = this.props;
     const { changed } = this.state;
     for (let i = 0; i < (changed.length); i += 1) {
-      // axios
-      console.log(changed[i]);
-
       const user = changed[i];
       const link = `/users/admin/${user._id}`;
       axios.post(link)
-        .then((res) => console.log(res.data));
+        .then((res) => console.log(res.data)); // eslint-disable-line no-console
     }
     alert('Changes have been made. \n Changes you have made on your own account will not change until you logout. ');
     handleSave();
@@ -80,5 +78,9 @@ Make Changes in Admin
     );
   }
 }
+
+AdminList.propTypes = {
+  handleSave: PropTypes.func.isRequired,
+};
 
 export default AdminList;

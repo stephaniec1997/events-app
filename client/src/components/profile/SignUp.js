@@ -26,7 +26,7 @@ class SignUp extends Component {
     const { username, email, password } = this.state;
     if (username.length < 3) {
       this.setState({ data: { success: false, message: 'Username is not long enough. Must be 3 characters long.' }, password: '' });
-    } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase()))) {
+    } else if (!(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase()))) {
       this.setState({ data: { success: false, message: 'You have entered an invalid email address!' }, password: '' });
     } else if (password.length < 5) {
       this.setState({ data: { success: false, message: 'Password is not long enough. Must be 5 characters long' }, password: '' });
@@ -44,18 +44,21 @@ class SignUp extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { state } = this;
+    const { data } = state;
 
-    const signUpParam = Object.keys(this.state).map((key) => {
+    const signUpParam = Object.keys(state).map((key) => {
       if ((key !== 'data') && (key !== 'admin')) {
         return (
           <div className="form-group" key={key}>
-            <label htmlFor={key}>
-              {key}
-:
-              {' '}
-            </label>
-            <input type={key} className="form-control" id={key} value={this.state[key]} onChange={(e) => { this.updateInfo(key, e); }} />
+            <label htmlFor={key}>{`${key}: `}</label>
+            <input
+              type={key}
+              className="form-control"
+              id={key}
+              value={state[key]}
+              onChange={(e) => { this.updateInfo(key, e); }}
+            />
           </div>
         );
       }
@@ -85,7 +88,7 @@ class SignUp extends Component {
         {badAlert}
         <h2>Sign Up</h2>
         {signUpParam}
-        <button type="submit" onClick={() => { this.signUp(this.state); }}>SignUp</button>
+        <button type="submit" onClick={() => { this.signUp(state); }}>SignUp</button>
       </div>
     );
   }
