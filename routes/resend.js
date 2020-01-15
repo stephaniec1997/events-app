@@ -4,9 +4,8 @@ var nodemailer = require('nodemailer');
 const router = require('express').Router();
 let Token = require('../models/token.model');
 let User = require('../models/user.model');
-/**
-* POST /resend
-*/
+
+/* POST new confirmation page */
 router.route('/').post((req, res) => {
     const { body } = req;
     let { email } = body;

@@ -31,22 +31,25 @@ class AdminList extends Component {
       });
   }
 
+  // hits change user admin status enpoint
   changeAdmin() {
     const { handleSave } = this.props;
     const { changed } = this.state;
     for (let i = 0; i < (changed.length); i += 1) {
       const user = changed[i];
       const link = `/users/admin/${user._id}`;
-      axios.post(link)
+      axios.put(link)
         .then((res) => console.log(res.data)); // eslint-disable-line no-console
     }
     alert('Changes have been made. \n Changes you have made on your own account will not change until you logout. ');
     handleSave();
   }
 
+  // add user to changed array if not already in there
+  // or removes them if in array
   isChanged(user) {
     const { changed } = this.state;
-    const { change } = changed;
+    const change = changed;
     if (change.includes(user)) {
       const i = change.find((u) => u._id === user._id);
       change.splice(i, 1);
