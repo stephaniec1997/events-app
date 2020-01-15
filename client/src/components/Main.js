@@ -4,7 +4,6 @@ import {
   Navbar, Nav,
   // NavDropdown,
 } from 'react-bootstrap/';
-// import { BrowserRouter as Router, Route} from "react-router-dom";
 import '../App.css';
 import { setInStorage, getFromStorage } from '../utils/storage';
 

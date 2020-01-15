@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import {
+  Navbar,
+} from 'react-bootstrap/';
+import logo from '../../logo1.png';
 
 class Confirm extends Component {
   constructor() {
@@ -32,21 +35,36 @@ class Confirm extends Component {
     const { mes, email } = this.state;
     return (
       <div id="app">
-        <p>{mes}</p>
-        <label htmlFor="email">
-        Email:
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => { this.setState({ email: e.target.value }); }}
-          />
-        </label>
-        <button type="button" className="button" onClick={() => { this.confirmEmail(email); }}>Confirm Email</button>
+        <Navbar bg="dark" className="heightChange">
+          <Navbar.Brand
+            className="center"
+          >
+            <img
+              alt=""
+              src={logo}
+              width="30"
+              height="30"
+              id="logo"
+              className="d-inline-block align-top"
+            />
+            <h3 className="logo"> Events</h3>
+          </Navbar.Brand>
+        </Navbar>
+        <div className="container justify-content-md-center">
+          <p>{mes}</p>
+          <label htmlFor="email">
+          Email:
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              value={email}
+              onChange={(e) => { this.setState({ email: e.target.value }); }}
+            />
+          </label>
+          <button type="button" className="button" onClick={() => { this.confirmEmail(email); }}>Confirm Email</button>
+        </div>
       </div>
-
-
     );
   }
 }
