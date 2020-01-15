@@ -73,7 +73,7 @@ router.route('/').post((req, res) => {
 
           // Send the email with verification info
           var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env.ADMIN_USERNAME, pass: process.env.ADMIN_PASSWORD } });
-          var mailOptions = { from: 'stephanie.castaneda@girlswhocode.com', to: user.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
+          var mailOptions = { from: 'stephanie.castaneda@girlswhocode.com', to: user.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttps:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
           transporter.sendMail(mailOptions, function (err) {
             if (err) { return res.status(500).send({ success:false, msg: err.message }); }
             const mes = 'A verification email has been sent to ' + user.email + '.'
