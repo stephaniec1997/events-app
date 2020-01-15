@@ -14,17 +14,17 @@ class Confirm extends Component {
 
   // hits confirm account enpoint
   confirmEmail(email) {
-    axios.post(window.location.href, email)
+    axios.put(window.location.href, email)
     // axios.post('http://localhost:5000/confirmation/47d00acb3e553fef3856ae2bc97d58cd', {email: email})
       .then((res) => {
         if (res.data.success) {
           alert(res.data.message);
-        // new button with
+          // new button with
+          window.location = '/'; // close current window
         } else {
           this.setState({ mes: res.data.message });
         }
       });
-    // close current window
   }
 
 
