@@ -17,9 +17,10 @@ class Confirm extends Component {
 
   // hits confirm account enpoint
   confirmEmail(email) {
-    axios.put(window.location.href, email)
+    axios.put(window.location.href, {email})
     // axios.post('http://localhost:5000/confirmation/47d00acb3e553fef3856ae2bc97d58cd', {email: email})
       .then((res) => {
+        console.log(res);
         if (res.data.success) {
           alert(res.data.message);
           // new button with
@@ -27,7 +28,8 @@ class Confirm extends Component {
         } else {
           this.setState({ mes: res.data.message });
         }
-      });
+      })
+      .catch(err => console.log(err));
   }
 
 

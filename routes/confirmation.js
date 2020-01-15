@@ -92,7 +92,6 @@ router.route('/:tokenID').put((req, res) => {
     let email = req.body.email;
     email = email.toLowerCase();
     email = email.trim();
-
     Token.findOne({ token: req.params.tokenID }, function (err, token) {
         if (!token) return res.send({
           success: false,
@@ -122,6 +121,7 @@ router.route('/:tokenID').put((req, res) => {
             });
         });
     });
+
 });
 
 module.exports = router;
