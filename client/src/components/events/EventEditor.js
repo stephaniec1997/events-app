@@ -94,6 +94,10 @@ class EventEditor extends Component {
   }
 }
 
+EventEditor.defaultProps = {
+  event: null
+};
+
 EventEditor.propTypes = {
   handleSave: PropTypes.func.isRequired,
   event: PropTypes.shape({
@@ -102,7 +106,7 @@ EventEditor.propTypes = {
     endDate: PropTypes.string,
     place: PropTypes.string,
     description: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default EventEditor;

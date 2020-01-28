@@ -111,6 +111,11 @@
   margin-top: 10px;
 }
 
+.react-datepicker-popper[data-placement="bottom-end"] .react-datepicker__triangle, .react-datepicker-popper[data-placement="top-end"] .react-datepicker__triangle {
+  left: auto;
+  right: 50px;
+}
+
 .react-datepicker-popper[data-placement^="top"] {
   margin-bottom: 10px;
 }

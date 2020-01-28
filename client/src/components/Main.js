@@ -14,8 +14,7 @@ import Login from './profile/Login';
 
 import AdminList from './profile/admin/AdminList';
 
-
-import logo from '../logo1.png';
+const logo =  require('../logo1.png');
 
 
 function login(token) {
@@ -269,7 +268,7 @@ class Main extends Component {
           </Navbar.Brand>
           <div className="flex-item">
             <Nav className="justify-content-end">
-              <Nav.Link>{menuButton}</Nav.Link>
+              {menuButton}
             </Nav>
             <Nav>
               {menuDisplay}
