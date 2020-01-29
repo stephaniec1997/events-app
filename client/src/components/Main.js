@@ -14,7 +14,7 @@ import Login from './profile/Login';
 
 import AdminList from './profile/admin/AdminList';
 
-const logo =  require('../logo1.png');
+const logo = require('../logo1.png');
 
 
 function login(token) {
@@ -168,19 +168,13 @@ class Main extends Component {
   // hits logout endpoint
   logout() {
     const { menu } = this.state;
-    const obj = getFromStorage('events-app');
-    if (obj && obj.token) {
-      const { token } = obj;
-      axios.delete(`/users/account/logout/${token}`)
-        .then((res) => {
-          if (res.data) {
-            this.setState({
-              token: '',
-              admin: false,
-            });
-          }
-        });
-    }
+    const { token } = this.state;
+    axios.delete(`/users/account/logout/${token}`)
+      .then((res) => {
+        if (res.data) {
+          this.setState({ token: '', admin: false });
+        }
+      });
     this.setState({ editor: false, signUp: false, menu: !menu });
   }
 

@@ -95,7 +95,7 @@ class EventEditor extends Component {
 }
 
 EventEditor.defaultProps = {
-  event: null
+  event: null,
 };
 
 EventEditor.propTypes = {
